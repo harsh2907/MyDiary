@@ -1,9 +1,8 @@
-package com.example.mydiary.presentation.screens
+package com.example.mydiary.presentation.screens.auth
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -15,15 +14,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.mydiary.R
 import com.example.mydiary.presentation.components.GoogleSignInButton
-import com.example.mydiary.ui.theme.MyDiaryTheme
 
 @Composable
 fun AuthScreenContent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    loadingState:Boolean,
+    onButtonClicked:()->Unit
 ) {
     Column(
         modifier = modifier,
@@ -53,10 +52,10 @@ fun AuthScreenContent(
         GoogleSignInButton(
             text = "Sign in with google",
             iconPainter = painterResource(id = R.drawable.google_logo),
-            modifier = Modifier.fillMaxWidth().padding(10.dp)
-        ) {
-
-        }
+            modifier = Modifier.fillMaxWidth().padding(10.dp),
+            isLoading = loadingState,
+            onClick = onButtonClicked
+        )
 /* Remove soon
         Column(
             modifier = Modifier.weight(1f),
@@ -90,10 +89,3 @@ fun AuthScreenContent(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun AuthPreview() {
-    MyDiaryTheme {
-        AuthScreenContent(modifier = Modifier.fillMaxSize())
-    }
-}
