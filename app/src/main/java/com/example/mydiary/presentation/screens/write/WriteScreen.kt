@@ -9,6 +9,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import com.stevdzasan.messagebar.ContentWithMessageBar
 import com.stevdzasan.messagebar.MessageBarState
+import java.time.ZonedDateTime
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -16,6 +17,7 @@ fun WriteScreen(
     uiState: WriteViewModel.UiState,
     pagerState: PagerState,
     messageBarState: MessageBarState,
+    loadingState: Boolean,
     selectedDiary: Diary?,
     onDeleteClicked: () -> Unit,
     onBackPressed: () -> Unit,
@@ -23,7 +25,7 @@ fun WriteScreen(
     onDescriptionChange: (String) -> Unit,
     moodName: () -> String,
     onSave: (Diary) -> Unit,
-    loadingState: Boolean
+    onDateTimeUpdated: (ZonedDateTime) -> Unit
 ) {
 
     Scaffold(
@@ -32,7 +34,8 @@ fun WriteScreen(
                 moodName = moodName,
                 selectedDiary = selectedDiary,
                 onDeleteClicked = onDeleteClicked,
-                onBackPressed = onBackPressed
+                onBackPressed = onBackPressed,
+                onDateTimeUpdated = onDateTimeUpdated
             )
         }
     ) { paddingValues ->

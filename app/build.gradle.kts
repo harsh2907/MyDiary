@@ -135,10 +135,17 @@ dependencies {
     implementation("com.github.stevdza-san:OneTapCompose:1.0.0")
 
 
-//    //Google Auth
+    //Google Auth
 //    implementation("com.google.android.gms:play-services-auth:20.6.0")
 
+    //Date-Time Picker
+    implementation ("com.maxkeppeler.sheets-compose-dialogs:core:1.0.2")
 
+    //Calendar
+    implementation ("com.maxkeppeler.sheets-compose-dialogs:calendar:1.0.2")
+
+    //Clock
+    implementation ("com.maxkeppeler.sheets-compose-dialogs:clock:1.0.2")
 
     /*
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
