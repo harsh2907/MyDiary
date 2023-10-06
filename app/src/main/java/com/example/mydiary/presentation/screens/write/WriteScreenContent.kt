@@ -2,6 +2,7 @@ package com.example.mydiary.presentation.screens.write
 
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -26,10 +28,13 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -43,9 +48,10 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.stevdzasan.messagebar.MessageBarState
+import kotlinx.coroutines.launch
 
 
-@OptIn(ExperimentalPagerApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun WriteScreenContent(
     uiState: WriteViewModel.UiState,
@@ -62,11 +68,16 @@ fun WriteScreenContent(
 ) {
     val scrollState = rememberScrollState()
     val allMoods = Mood.values()
-    val keyboard = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(mood) {
         pagerState.scrollToPage(Mood.valueOf(mood).ordinal)
+    }
+
+    LaunchedEffect(key1 = scrollState.maxValue){
+        scrollState.scrollTo(scrollState.maxValue)
     }
 
     Column(
@@ -83,12 +94,12 @@ fun WriteScreenContent(
                 .weight(1f)
                 .verticalScroll(scrollState)
         ) {
-            Spacer(modifier = Modifier.height(30.dp))
 
 
             HorizontalPager(
                 count = allMoods.size,
-                state = pagerState
+                state = pagerState,
+                modifier = Modifier.padding(vertical = 20.dp)
             ) { index ->
                 val currentMood = allMoods[index]
 
@@ -102,7 +113,6 @@ fun WriteScreenContent(
                 )
             }
 
-            Spacer(modifier = Modifier.height(30.dp))
 
             TextField(
                 value = title,
@@ -119,7 +129,12 @@ fun WriteScreenContent(
                     unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
                 ),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                keyboardActions = KeyboardActions(onNext = {}),
+                keyboardActions = KeyboardActions(onNext = {
+                    coroutineScope.launch {
+                        scrollState.animateScrollTo(Int.MAX_VALUE)
+                        focusManager.moveFocus(FocusDirection.Down)
+                    }
+                }),
                 singleLine = true,
                 maxLines = 1,
                 textStyle = TextStyle(
@@ -143,10 +158,10 @@ fun WriteScreenContent(
                     unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
                 ),
                 keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done
+                    imeAction = ImeAction.Next
                 ),
-                keyboardActions = KeyboardActions(onDone = {
-                    keyboard?.hide()
+                keyboardActions = KeyboardActions(onNext = {
+                    focusManager.clearFocus()
                 }),
             )
         }

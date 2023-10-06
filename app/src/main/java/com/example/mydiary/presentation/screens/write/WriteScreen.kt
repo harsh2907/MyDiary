@@ -1,6 +1,6 @@
 package com.example.mydiary.presentation.screens.write
 
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -28,22 +28,22 @@ fun WriteScreen(
     onDateTimeUpdated: (ZonedDateTime) -> Unit
 ) {
 
-    Scaffold(
-        topBar = {
-            WriteScreenTopBar(
-                moodName = moodName,
-                selectedDiary = selectedDiary,
-                onDeleteClicked = onDeleteClicked,
-                onBackPressed = onBackPressed,
-                onDateTimeUpdated = onDateTimeUpdated
-            )
-        }
-    ) { paddingValues ->
-        ContentWithMessageBar(
-            messageBarState = messageBarState,
-            errorMaxLines = 5,
-            modifier = Modifier.padding(paddingValues)
-        ) {
+    ContentWithMessageBar(
+        messageBarState = messageBarState,
+        errorMaxLines = 5,
+        modifier = Modifier.statusBarsPadding()
+    ) {
+        Scaffold(
+            topBar = {
+                WriteScreenTopBar(
+                    moodName = moodName,
+                    selectedDiary = selectedDiary,
+                    onDeleteClicked = onDeleteClicked,
+                    onBackPressed = onBackPressed,
+                    onDateTimeUpdated = onDateTimeUpdated
+                )
+            }
+        ) { paddingValues ->
             WriteScreenContent(
                 uiState = uiState,
                 loadingState = loadingState,
@@ -60,4 +60,3 @@ fun WriteScreen(
         }
     }
 }
-
