@@ -56,36 +56,6 @@ fun AuthScreenContent(
             isLoading = loadingState,
             onClick = onButtonClicked
         )
-/* Remove soon
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.Top
-        ) {
-            Text(
-                text = "My Diary",
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.headlineLarge,
-                modifier = Modifier.padding(6.dp)
-            )
-        }
-
-        Column(
-            modifier = Modifier.weight(9f),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-        }
-
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.Bottom
-        ) {
-
-        }
-
- */
-
     }
 }
 

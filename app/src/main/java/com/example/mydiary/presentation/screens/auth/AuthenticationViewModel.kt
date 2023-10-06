@@ -22,7 +22,7 @@ class AuthenticationViewModel : ViewModel() {
 
     fun signInWithMongoDB(
         token: String,
-        onSuccess: (Boolean) -> Unit,
+        onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     ) {
         viewModelScope.launch {
@@ -30,14 +30,17 @@ class AuthenticationViewModel : ViewModel() {
                 val result = withContext(Dispatchers.IO) {
                     App.create(Constants.APP_ID).login(
                         Credentials.jwt(token)
-                     //   Credentials.google(token, GoogleAuthType.ID_TOKEN)
                     ).loggedIn
                 }
 
                 withContext(Dispatchers.IO) {
-                    onSuccess(result)
-                    delay(600)
-                    isAuthenticated.value = true
+                    if(result){
+                        onSuccess()
+                        delay(600)
+                        isAuthenticated.value = true
+                    }
+                    else
+                        onError(Exception("User not logged in."))
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.IO) {

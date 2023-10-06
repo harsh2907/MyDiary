@@ -8,7 +8,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
+import com.example.mydiary.data.repository.MongoDB
 import com.example.mydiary.navigation.Screen
 import com.example.mydiary.navigation.SetupNavGraph
 import com.example.mydiary.ui.theme.MyDiaryTheme
@@ -19,15 +21,17 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
+        WindowCompat.setDecorFitsSystemWindows(window,false)
         setContent {
             MyDiaryTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    val navController = rememberNavController()
                     SetupNavGraph(
                         startDestination = getStartDestination(),
-                        navController = rememberNavController()
+                        navController = navController
                     )
                 }
             }
@@ -35,7 +39,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun getStartDestination():String{
-        val user = App.create(Constants.APP_ID).currentUser
+        val user = MongoDB.user
 
         return if(user!= null && user.loggedIn)
             Screen.Home.route
